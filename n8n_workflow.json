@@ -9,10 +9,10 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -240,
-        -16
+        -48,
+        0
       ],
-      "id": "e732e057-421d-44d8-a113-5b9b08e9d92f",
+      "id": "e75a1176-6b13-400c-b2d7-9a68bbe3c445",
       "name": "Webhook",
       "webhookId": "ba501ac0-74a4-4a0f-ad76-603b4563b301"
     },
@@ -27,7 +27,7 @@
         "messages": {
           "values": [
             {
-              "content": "=Analyze the following customer feedback. Provide your analysis strictly in a JSON format with three keys: \"sentiment\", \"summary\", and \"keywords\".\n\n- \"sentiment\" must be one of the following strings: Positive, Negative, or Neutral.\n- \"summary\" must be a one-sentence summary of the main point.\n- \"keywords\" must be an array of 1 to 3 important words or phrases.\n\nHere is the feedback:\n{{ $json.body[\"Your Feedback\"] }}"
+              "content": "=Analyze the following customer feedback. Provide your analysis strictly in a JSON format with three keys: \"sentiment\", \"summary\", and \"keywords\".\n\n- \"sentiment\" must be one of the following strings: Positive, Negative, or Neutral.\n- \"summary\" must be a one-sentence summary of the main point.\n- \"keywords\" must be an array of 1 to 3 important words or phrases.\n\nHere is the feedback:\n{{ $json.body['Your Feedback  '] }}"
             }
           ]
         },
@@ -37,15 +37,15 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        -32,
-        -16
+        160,
+        0
       ],
-      "id": "c5678929-cc34-4fb7-8d48-601068d2fb34",
+      "id": "03c79093-e474-4d6c-8dde-c4e3ffc88267",
       "name": "Message a model",
       "credentials": {
         "googlePalmApi": {
-          "id": "YiuNkOmWvztbbXfs",
-          "name": "Google Gemini(PaLM) Api account"
+          "id": "h9dXvNhUxuIOvYex",
+          "name": "Google Gemini(PaLM) Api account 3"
         }
       }
     },
@@ -141,15 +141,15 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.6,
       "position": [
-        528,
-        -16
+        720,
+        0
       ],
-      "id": "9532dc9f-09d7-4ab7-a52c-82bbc4f5ee2d",
+      "id": "72b6b0c7-b03e-408b-981d-f5c76a1b0fb3",
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "niLcgefIXYCb0PQ2",
-          "name": "Google Sheets account"
+          "id": "XVSA0ehTvXyjJt4J",
+          "name": "Google Sheets account 4"
         }
       }
     },
@@ -160,10 +160,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        320,
-        -16
+        512,
+        0
       ],
-      "id": "a40c59df-9f4c-4c82-9c52-29e3cb502ac1",
+      "id": "63f31674-0705-4f63-8900-85bf61b34f4c",
       "name": "Code"
     }
   ],
@@ -204,6 +204,7 @@
   },
   "pinData": {},
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "033538ebdc6f96b9f7db553aca523b453505d0355ef88d9e550773d416c65536"
   }
 }
