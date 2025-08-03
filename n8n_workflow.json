@@ -1,0 +1,218 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ba501ac0-74a4-4a0f-ad76-603b4563b301",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d68ae68d-777f-4143-b9c3-fff52dcb9f8f",
+      "name": "Webhook",
+      "webhookId": "ba501ac0-74a4-4a0f-ad76-603b4563b301"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Analyze the following customer feedback. Provide your analysis strictly in a JSON format with three keys: \"sentiment\", \"summary\", and \"keywords\".\n\n- \"sentiment\" must be one of the following strings: Positive, Negative, or Neutral.\n- \"summary\" must be a one-sentence summary of the main point.\n- \"keywords\" must be an array of 1 to 3 important words or phrases.\n\nHere is the feedback:\n{{ $json.body[\"Your Feedback\"] }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6241efa6-79f3-4080-9926-86abe01e8424",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YiuNkOmWvztbbXfs",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1rNR6XcjQu0Cb7kt8UNDarEfHom1aT7MPPk6alRcGMCg",
+          "mode": "list",
+          "cachedResultName": "Feedback Analysis",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rNR6XcjQu0Cb7kt8UNDarEfHom1aT7MPPk6alRcGMCg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1rNR6XcjQu0Cb7kt8UNDarEfHom1aT7MPPk6alRcGMCg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Webhook').item.json.body.Timestamp }}",
+            "Name": "={{ $('Webhook').item.json.body['Name '] }}",
+            "Feedback": "={{ $('Webhook').item.json.body['Your Feedback  '] }}",
+            "Sentiment": "={{ $('Code').item.json.sentiment }}",
+            "Summary": "={{ $('Code').item.json.summary }}",
+            "Keywords": "={{ JSON.stringify($('Code').item.json.keywords) }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Feedback",
+              "displayName": "Feedback",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Sentiment",
+              "displayName": "Sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Keywords",
+              "displayName": "Keywords",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        768,
+        0
+      ],
+      "id": "1125e309-451e-48fe-9520-21ec9c516701",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "niLcgefIXYCb0PQ2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the text output from the Gemini node using the CORRECT path\nconst geminiOutputText = $('Message a model').item.json.content.parts[0].text;\n\n// Parse the text into a real JSON object\nconst parsedData = JSON.parse(geminiOutputText);\n\n// Return the clean data\nreturn parsedData;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "2281f816-a559-49da-bf96-3781adb3fa26",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dcdbd338-be2f-4f80-b8c9-857ed05256b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "033538ebdc6f96b9f7db553aca523b453505d0355ef88d9e550773d416c65536"
+  },
+  "id": "ceHzFBqe3q5KAtGe",
+  "tags": []
+}
